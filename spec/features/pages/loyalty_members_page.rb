@@ -113,4 +113,12 @@ module MembersPage
   def verify_offer_is_not_linked
     verify_no_content_by_xpath "//ul[@class='member_offers_block']//div[@class='achievement_name' and normalize-space('Auto_Promotion_Points_x2')]"
   end
+
+  def current_points
+    find(:xpath, "//*[@id='primary']//div[@class='info_column with_right_border'][1]//dd[1]", wait: 2).text.to_i
+  end
+
+  def members_found_after_search
+    find(:xpath, "//h2[@class='pagination_counter']", wait: 5)
+  end
 end

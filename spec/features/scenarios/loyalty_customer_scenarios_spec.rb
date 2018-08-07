@@ -25,7 +25,7 @@ feature 'Customer' do
   end
 
   # Scenario 1: A customer earn the World Badge
-  it 'should earn the world badge' do
+  it 'should earns the world badge' do
     # Customer should perform 3 purchases
     navigate_members
     add_new_member @member_id
@@ -40,23 +40,27 @@ feature 'Customer' do
     sleep 2
   end
 
-  # Scenario 2: A customer get Double Points from a Purchase due a Promotion
+  # Scenario 2: A customer gets Double Points from a Purchase due a Promotion
   it 'should get double points from a purchase due a linked promotion' do
-    pending 'Scenario is in progress...'
     navigate_members
-    # add_new_member @member_id
+    add_new_member @member_id
     find_member @member_id
     link_offer 'Auto_Promotion_Points_x2'
     verify_offer_is_linked
-    get_current_points
-    # record_purchase_event
-    # verify_points
+    expected_points_balance = current_points + (10 * 2)
+    record_purchase_event
+    current_points.equal? expected_points_balance
+    sleep 2
   end
 
-  # Scenario 3: A customer earns the Tier Level 2
+  # Scenario 3: A customer reaches the Tier Level 2
+  it 'should reach the tier level 2' do
+    # pending 'Scenario is in progress...'
+    #
+  end
+
   # Scenario 4: A customer Redeem the Reward A
   # Scenario 5: A customer belongs to a special segment
-
 
   after(:each) do
     logout(@username)

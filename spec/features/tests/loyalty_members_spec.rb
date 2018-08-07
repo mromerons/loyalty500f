@@ -36,7 +36,6 @@ feature 'Members Module' do
   end
 
   it 'should edit member profile' do
-    # @member_id = 'automember1528942706'
     find_member @member_id
     edit_member_profile
     within '.flash_notice' do
@@ -46,7 +45,6 @@ feature 'Members Module' do
   end
 
   it 'should view member events' do
-    # @member_id = 'automember1528942706'
     find_member @member_id
     open_manage_events
     verify_content 'Members » View » Manage Events'
@@ -55,7 +53,7 @@ feature 'Members Module' do
 
   it 'should not find a member' do
     fill_in 'search_string', with: 'xxxxxxxxxxxxxxxxxxx123456789'
-    find(:xpath, "//h2[@class='pagination_counter']", wait: 5).has_text? 'No entries found'
+    members_found_after_search.has_text? 'No entries found'
     sleep 1
   end
 
@@ -97,7 +95,6 @@ feature 'Members Module' do
 
   it 'should link a offer' do
     find_member @member_id
-    # find_member 'automember1532730078'
     link_offer 'Auto_Promotion_Points_x2'
     verify_offer_is_linked
     sleep 1
@@ -105,18 +102,17 @@ feature 'Members Module' do
 
   it 'should unlink a offer' do
     find_member @member_id
-    # find_member 'automember1532730078'
     unlink_offer 'Auto_Promotion_Points_x2'
     verify_offer_is_not_linked
     sleep 1
   end
 
-  # it 'should verify current point balance' do
-    #
-  # end
+  it 'should display the current points balance' do
+    find_member @member_id
+    puts 'The current point balance from customer is:' + current_points.to_s
+  end
 
   it 'should pause a member' do
-    # @member_id = 'automember1528942706'
     find_member @member_id
     pause_member
     within '.flash_notice' do
