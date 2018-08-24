@@ -46,6 +46,10 @@ feature 'Segments Module' do
     sleep 1
   end
 
+  it 'should preview customers in segment' do
+    click_preview_in_segment
+  end
+
   after(:each) do
     logout(@username)
   end

@@ -94,6 +94,17 @@ module MembersPage
     verify_content_by_xpath "//div[@class='badge_title' and text()='Auto_Badge_World']"
   end
 
+  def verify_tier_section
+    verify_content_by_xpath "//div[@class='achievements_wrap tier clear']"
+  end
+
+  def verify_tier_level
+    update_date_selection
+    current_tier = find(:xpath, "//div[@class='achievements_wrap tier clear']//li[@class='achievements']//div[@class='achievement_description'][normalize-space()]", wait: 2).text
+    # current_tier = find(:xpath, "//div[@class='achievements_wrap tier clear']//li[@class='achievements']//div[@class='achievement_description'][normalize-space()]/*[1]", wait: 2).text
+    current_tier.split(/\s/, 2).first
+  end
+
   def link_offer(offer)
     find(:id, 'customer_customer_offers', wait: 2).click
     find(:xpath, "//select[@id='customer_customer_offers']/option[text()='" + offer + "']").click

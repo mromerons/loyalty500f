@@ -29,4 +29,8 @@ module SegmentsPage
     click_link_or_button 'Delete segment'
     find(:xpath, "//div[@class='delete_overlay']//a[@class='primary_button del_button' and contains(text(), 'Delete')]", wait: 2).click
   end
+
+  def preview_customers_in_segment
+    find(:xpath, "//a[@class='secondary_button preview_page']", wait: 2).click
+  end
 end

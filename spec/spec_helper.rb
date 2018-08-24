@@ -9,7 +9,7 @@ require 'capybara/dsl'
 require 'capybara/rspec'
 require 'pry'
 require 'selenium-webdriver'
-require 'site_prism'
+# require 'site_prism'
 require 'webdriver-highlighter'
 
 # - - - - - - - - - - - - - - -
