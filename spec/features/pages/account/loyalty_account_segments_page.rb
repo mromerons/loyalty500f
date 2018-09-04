@@ -32,5 +32,26 @@ module SegmentsPage
 
   def preview_customers_in_segment
     find(:xpath, "//a[@class='secondary_button preview_page']", wait: 2).click
+    within_frame find(:id, 'preview', wait: 2) do
+      has_text? 'Preview of Segment'
+    end
+  end
+
+  def open_segment(name)
+    find(:xpath, "//a[@class='item' and contains(@href, '/edit')]//dt[normalize-space(text()) = '" + name + "']", wait: 2).click
+  end
+
+  def close_segment_preview
+    within_frame find(:id, 'preview', wait: 2) do
+      click_link_or_button 'Close'
+    end
+  end
+
+  def verify_customer_belongs_to_segment(customer)
+    customer_found =
+      within_frame find(:id, 'preview', wait: 2) do
+        find(:xpath, "//div[@id='data_area']/table/tbody/tr/th", wait: 2).text
+      end
+    customer_found.eql? customer
   end
 end

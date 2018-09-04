@@ -21,6 +21,7 @@ feature 'Customer' do
     @password = 'Test1234'
     @member_id = 'AutoMember' + Time.now.to_i.to_s
     # @automation_member_1 = 'merklensqa+n1@gmail.com'
+    @automation_customer_1 = 'Nearsoft Test1'
 
     visit '/'
     login(@username, @password)
@@ -29,7 +30,6 @@ feature 'Customer' do
 
   # Scenario 1: A customer earn the World Badge
   it 'should earns the world badge' do
-    # Customer should perform 3 purchases
     navigate_members
     add_new_member @member_id
     find_member @member_id
@@ -58,12 +58,11 @@ feature 'Customer' do
 
   # Scenario 3: A customer reaches the Tier Level 2
   it 'should reach the tier level 2' do
-    # pending 'Scenario is in progress...'
     navigate_members
     add_new_member @member_id
     find_member @member_id
     verify_tier_section
-    puts 'Current Tier: ' + verify_tier_level
+    # puts 'Current Tier: ' + verify_tier_level
     10.times do
       record_purchase_event
     end
@@ -72,30 +71,25 @@ feature 'Customer' do
     end
     sleep 5
     update_date_selection
-    puts 'Current Tier: ' + verify_tier_level
+    # puts 'Current Tier: ' + verify_tier_level
     verify_tier_level.eql? 'Auto_Level_2'
     # sleep 2
   end
 
   # Scenario 4: A customer must belongs to a special Segment
   it 'should belongs to a special segment' do
-    binding.pry
+    navigate_account_segments
+    open_segment 'Auto_Segment_Special'
     preview_customers_in_segment
-
+    verify_customer_belongs_to_segment @automation_customer_1
+    close_segment_preview
+    # sleep 2
   end
 
-  # Scenario 4: A customer triggers an Event based on some Promotion settings
-  # xit 'should trigger an event based on some promotion settings' do
+  # Scenario 5: A customer triggers an Event based on some Promotion settings
+  # it 'should trigger an event based on some promotion settings' do
   #   # pending 'Scenario is not ready...'
-  #   navigate_account_offers
-  #   add_promotion 'test_xxx'
-  #   navigate_members
-  #   add_new_member @member_id
-  #   find_member @member_id
   # end
-
-  # Scenario 5: A customer belongs to a special segment
-  # pending 'Scenario is not ready...'
 
   after(:each) do
     logout(@username)

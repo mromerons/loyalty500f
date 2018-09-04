@@ -2,6 +2,7 @@ require './lib/requires'
 
 feature 'Segments Module' do
   include VerificationHelpers
+  include Navigation
   include LoginPage
   include AdminPage
   include LandingPage
@@ -9,6 +10,7 @@ feature 'Segments Module' do
 
   before(:all) do
     @segment_name = 'Auto_segment_' + Time.now.to_i.to_s
+    @automation_customer_1 = 'Nearsoft Test1'
   end
 
   before(:each) do
@@ -47,7 +49,10 @@ feature 'Segments Module' do
   end
 
   it 'should preview customers in segment' do
-    click_preview_in_segment
+    open_segment 'Auto_Segment_Special'
+    preview_customers_in_segment
+    verify_customer_belongs_to_segment @automation_customer_1
+    close_segment_preview
   end
 
   after(:each) do

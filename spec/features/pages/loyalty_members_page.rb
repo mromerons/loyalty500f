@@ -101,7 +101,6 @@ module MembersPage
   def verify_tier_level
     update_date_selection
     current_tier = find(:xpath, "//div[@class='achievements_wrap tier clear']//li[@class='achievements']//div[@class='achievement_description'][normalize-space()]", wait: 2).text
-    # current_tier = find(:xpath, "//div[@class='achievements_wrap tier clear']//li[@class='achievements']//div[@class='achievement_description'][normalize-space()]/*[1]", wait: 2).text
     current_tier.split(/\s/, 2).first
   end
 
