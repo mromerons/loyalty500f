@@ -68,7 +68,7 @@ feature 'Members Module' do
 
   it 'should record a custom purchase' do
     find_member @member_id
-    record_custom_purchase_event 'auto_custom_purchase'
+    record_custom_purchase_event 'auto_custom_purchase', 10
     within '.flash_notice' do
       verify_content 'Points given to the customer.'
     end

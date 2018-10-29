@@ -33,9 +33,9 @@ module OffersPage
   def add_promotion(name)
     find(:xpath, "//a[contains(text(), 'Manage Promotions')]", wait: 2).click
     find(:xpath, "//div[@id='group-c']/a/div", wait: 2).click
-    find(:id, 's2id_point_promotion_external_id', wait: 2).click
-    find(:xpath, "//*[@id='s2id_point_promotion_external_id']/ul/li/input", wait: 2).set(name + '_External_ID')
-    find(:xpath, "//*[@id='s2id_point_promotion_external_id']/ul/li/input", wait: 2).native.send_keys(:return)
+    find(:xpath, "//div[@id='s2id_point_promotion_external_ids']/ul/li[@class='select2-search-field']", wait: 2).click
+    find(:xpath, "//*[@id='s2id_point_promotion_external_ids']/ul/li/input", wait: 2).set(name + '_External_ID')
+    find(:xpath, "//*[@id='s2id_point_promotion_external_ids']/ul/li/input", wait: 2).native.send_keys(:return)
     fill_in 'point_promotion_name', with: name
     fill_in 'point_promotion_display_name', with: name + '_Display_Name'
     fill_in 'point_promotion_description', with: name + '_Description'

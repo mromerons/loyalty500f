@@ -48,7 +48,7 @@ feature 'Segments Module' do
     sleep 1
   end
 
-  it 'should preview customers in segment' do
+  it 'should preview customers in a segment' do
     open_segment 'Auto_Segment_Special'
     preview_customers_in_segment
     verify_customer_belongs_to_segment @automation_customer_1

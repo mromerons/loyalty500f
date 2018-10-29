@@ -72,11 +72,11 @@ module MembersPage
     click_link_or_button 'Save'
   end
 
-  def record_custom_purchase_event(custom_purchase)
+  def record_custom_purchase_event(custom_purchase, value)
     click_link_or_button 'Record Events'
     find(:id, 'event_type', wait: 2).click
     find(:xpath, "//select[@id='event_type']//option[@value='" + custom_purchase.downcase + "']", wait: 2).click
-    fill_in 'event_value', with: 20
+    fill_in 'event_value', with: value
     click_link_or_button 'Save'
   end
 
@@ -130,5 +130,26 @@ module MembersPage
 
   def members_found_after_search
     find(:xpath, "//h2[@class='pagination_counter']", wait: 5)
+  end
+
+  def current_rewards_redeemed
+    find(:xpath, "//*[@id='primary']//div[@class='info_column with_right_border'][2]/dl/dd[2]", wait: 2).text.to_i
+  end
+
+  def verify_elegible_rewards_section
+    verify_content_by_xpath "//div[@class='rewards_wrap eligible_rewards']"
+  end
+
+  def verify_upcoming_rewards_section
+    verify_content_by_xpath "//div[@class='rewards_wrap upcoming_rewards']"
+  end
+
+  def purchase_via_api(member_id)
+    url = "https://loyalty-stage.500friends.com/api/record.json?uuid=d01714e04c5f13&email=automember" + member_id + "%40gmail.com&type=purchase&value=20&event_id=" + member_id + "&brand=Nearsoft&channel=qa&sub_channel=automation"
+    RestClient.get(url)
+  end
+
+  def verify_event_exist(event_name)
+    verify_content_by_xpath "//table[@id='approved']/tbody/tr[contains(@class, '" + event_name.downcase + "')]//dt[contains(text(), '" + event_name + "')]"
   end
 end

@@ -50,7 +50,7 @@ module SegmentsPage
   def verify_customer_belongs_to_segment(customer)
     customer_found =
       within_frame find(:id, 'preview', wait: 2) do
-        find(:xpath, "//div[@id='data_area']/table/tbody/tr/th", wait: 2).text
+        find(:xpath, "//div[@id='data_area']/table/tbody/tr/th", wait: 10).text
       end
     customer_found.eql? customer
   end
