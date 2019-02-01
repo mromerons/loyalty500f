@@ -25,7 +25,7 @@ module RewardsPage
 
   def delete_reward(name)
     find(:xpath, "//a/dt[contains(text(), '" + name + "')]", wait: 2).click
-    click_link_or_button 'Delete reward'
+    click_link_or_button 'Delete Reward'
     find(:xpath, "//div[@class='delete_overlay']//a[@class='primary_button del_button' and contains(text(), 'Delete')]", wait: 2).click
   end
 end

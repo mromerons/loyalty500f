@@ -125,6 +125,7 @@ feature 'Customer' do
     link_offer 'Auto_Promotion_Trigger_Event'
     update_date_selection
     purchase_via_api(@member_id.sub('AutoMember', ''))
+    sleep 5
     manage_events
     verify_content 'Members » View » Manage Events'
     verify_event_exist 'Auto_promotion_event'

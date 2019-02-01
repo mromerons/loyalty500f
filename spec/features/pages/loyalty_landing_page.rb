@@ -2,7 +2,7 @@ module LandingPage
   include Capybara::DSL
 
   def logout(username)
-    find(:xpath, "//a[@class='options_link' and contains(text(), '" + username.to_s + "')]").hover
+    find(:xpath, "//a[@class='options_link' and contains(text(), 'Nearsoft')]").hover
     click_link 'Logout'
   end
 

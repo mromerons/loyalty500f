@@ -121,6 +121,9 @@ feature 'Members Module' do
     sleep 1
   end
 
+  # PENDING TEST ACTIVATE MEMBER
+  # PENDING TEST DELETE MEMBER
+
   after(:each) do
     logout(@username)
   end

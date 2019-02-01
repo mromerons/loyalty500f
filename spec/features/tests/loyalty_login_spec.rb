@@ -15,17 +15,14 @@ feature 'Login Module' do
 
   it 'should sign in loyaltyplus' do
     login(@username, @password)
-    within '.primary_wrap' do
-      has_text? '500friends'
-    end
+    find(:xpath, "//body[@class='dashboard overview']//a[text()='Nearsoft']", wait: 2)
     sleep 1
   end
 
   it 'should go to test automation account' do
     login(@username, @password)
     find_account(@account)
-    # binding.pry
-    account_name = find(:xpath, "//section[@id='primary']/div/h1", wait: 2)
+    account_name = find(:xpath, "//div[@id='header']/ul/li/a[@class='account_name_tab']", wait: 2)
     account_name.text eq 'Nearsoft Automation'
     sleep 1
   end
