@@ -1,9 +1,19 @@
+require './lib/helpers/navigation'
+
 module LandingPage
   include Capybara::DSL
 
-  def logout(username)
-    find(:xpath, "//a[@class='options_link' and contains(text(), 'Nearsoft')]").hover
-    click_link 'Logout'
+  def verify_user_input
+    find(:id, 'new_user_session', wait: 2)
+  end
+
+  def logout
+    find(:xpath, "//ul[@class='global_nav horizontal']/li[@class='options_tab' and not(@id)]/div[@class='options_wrap']", wait: 2).hover
+    find(:xpath, "//ul[@class='global_nav horizontal']/li[@class='options_tab' and not(@id)]/div[@class='options_wrap']/menu", wait: 2).hover
+    logout_link = find(:xpath, "//ul[@class='global_nav horizontal']/li[@class='options_tab' and not(@id)]/div[@class='options_wrap']/menu/ul/li/a[contains(@href,'logout')]", wait: 2)
+    logout_link.hover.click
+    url = URI.parse(page.current_url).path
+    url == "/login" ? verify_user_input : false
   end
 
   # Main Navigation Bar

@@ -32,7 +32,7 @@ module SegmentsPage
 
   def preview_customers_in_segment
     find(:xpath, "//a[@class='secondary_button preview_page']", wait: 2).click
-    within_frame find(:id, 'preview', wait: 2) do
+    within_frame 'preview' do
       has_text? 'Preview of Segment'
     end
   end
@@ -41,17 +41,20 @@ module SegmentsPage
     find(:xpath, "//a[@class='item' and contains(@href, '/edit')]//dt[normalize-space(text()) = '" + name + "']", wait: 2).click
   end
 
-  def close_segment_preview
-    within_frame find(:id, 'preview', wait: 2) do
+  def close_segment_preview_frame
+    within_frame 'preview' do
       click_link_or_button 'Close'
     end
   end
 
   def verify_customer_belongs_to_segment(customer)
-    customer_found =
-      within_frame find(:id, 'preview', wait: 2) do
-        find(:xpath, "//div[@id='data_area']/table/tbody/tr/th", wait: 10).text
-      end
-    customer_found.eql? customer
+    within_frame 'preview' do
+      @customer_found = find(:xpath, "//div[@id='data_area']/table/tbody/tr/th", wait: 10).text
+    end
+    @customer_found == customer
+  end
+
+  def cancel_segment
+    find(:xpath, "//form[contains(@id, 'edit_segment')]//a[@class='primary_button cancel_button']", wait: 2).click
   end
 end

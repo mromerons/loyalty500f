@@ -11,10 +11,6 @@ feature 'Customer' do
   include OffersPage
   include SegmentsPage
 
-  # before(:all) do
-  #   @member_id = 'AutoMember' + Time.now.to_i.to_s
-  # end
-
   before(:each) do
     @account = 1008
     @username = 'merklensqa@gmail.com'
@@ -29,7 +25,7 @@ feature 'Customer' do
   end
 
   # Scenario 1: A customer earn the World Badge
-  it 'should earns the world badge' do
+  it 'should earn the world badge' do
     navigate_members
     add_new_member @member_id
     find_member @member_id
@@ -77,12 +73,13 @@ feature 'Customer' do
   end
 
   # Scenario 4: A customer must belongs to a special Segment
-  it 'should belongs to a special segment' do
+  it 'should belong to a special segment' do
     navigate_account_segments
     open_segment 'Auto_Segment_Special'
     preview_customers_in_segment
     verify_customer_belongs_to_segment @automation_customer_1
-    close_segment_preview
+    close_segment_preview_frame
+    cancel_segment
     # sleep 2
   end
 
@@ -96,7 +93,7 @@ feature 'Customer' do
     navigate_members
     add_new_member @member_id
     find_member @member_id
-    puts 'The current number of rewards redeemed is: ' + current_rewards_redeemed.to_s
+    # puts 'The current number of rewards redeemed is: ' + current_rewards_redeemed.to_s
     # Reach Level 2 Tier
     10.times do
       record_purchase_event
@@ -112,8 +109,8 @@ feature 'Customer' do
     record_custom_purchase_event 'Auto_custom_purchase', 700
     sleep 4
     update_date_selection
-    puts 'The new number of rewards redeemed is: ' + current_rewards_redeemed.to_s
-    current_rewards_redeemed.equal? 1
+    # puts 'The new number of rewards redeemed is: ' + current_rewards_redeemed.to_s
+    current_rewards_redeemed == 1
     # sleep 2
   end
 
@@ -132,6 +129,6 @@ feature 'Customer' do
   end
 
   after(:each) do
-    logout(@username)
+    logout
   end
 end

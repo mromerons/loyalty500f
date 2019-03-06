@@ -1,10 +1,12 @@
 require './lib/requires'
+require './lib/helpers/navigation'
 
 feature 'Login Module' do
   include VerificationHelpers
   include LoginPage
   include AdminPage
   include LandingPage
+  include Navigation
 
   before(:each) do
     visit '/'
@@ -15,19 +17,17 @@ feature 'Login Module' do
 
   it 'should sign in loyaltyplus' do
     login(@username, @password)
-    find(:xpath, "//body[@class='dashboard overview']//a[text()='Nearsoft']", wait: 2)
-    sleep 1
+    verify_user_name
   end
 
   it 'should go to test automation account' do
     login(@username, @password)
     find_account(@account)
-    account_name = find(:xpath, "//div[@id='header']/ul/li/a[@class='account_name_tab']", wait: 2)
-    account_name.text eq 'Nearsoft Automation'
-    sleep 1
+    account_name = verify_account_name.text
+    account_name == 'Nearsoft Automation'
   end
 
   after(:each) do
-    logout(@username)
+    logout
   end
 end

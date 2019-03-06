@@ -125,6 +125,6 @@ feature 'Members Module' do
   # PENDING TEST DELETE MEMBER
 
   after(:each) do
-    logout(@username)
+    logout
   end
 end

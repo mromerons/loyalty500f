@@ -40,10 +40,13 @@ module OffersPage
     fill_in 'point_promotion_legal', with: name + '_Legal'
     find(:xpath, "//div[@id='point_promotion_display_icon_url']//input[@name='file']", wait: 2).set(File.absolute_path('./lib/data/promotion.png'))
     sleep 5
-    find(:xpath, "//div[@id='point_rule_timebased_content']/*/dt[contains(text(), 'Start Date')]/input[@class='datepicker hasDatepicker']", wait: 2).click
-    find(:xpath, "//div[@id='ui-datepicker-div']/table/tbody/tr/td/a[.//text()='" + Date.today.day.to_s + "']", wait: 2).click
-    find(:xpath, "//div[@id='point_rule_timebased_content']/*/dt[contains(text(), 'End Date')]/input[@class='datepicker hasDatepicker']", wait: 2).click
-    find(:xpath, "//div[@id='ui-datepicker-div']/table/tbody/tr/td/a[.//text()='" + Date.today.day.to_s + "']", wait: 2).click
+    find(:xpath, "//input[@class='date_time_picker start_date long_time']", wait: 2).click
+    find(:xpath, "//div[@class='xdsoft_datetimepicker xdsoft_noselect xdsoft_' and contains(@style, 'display: block')]//div[@class='xdsoft_datepicker active']//td[contains(@class, 'xdsoft_today')]", wait: 2).click
+    find(:xpath, "//div[@class='xdsoft_datetimepicker xdsoft_noselect xdsoft_' and contains(@style, 'display: block')]//div[@class='xdsoft_timepicker active']//div[contains(@class, 'xdsoft_current')]", wait: 2).click
+    find(:xpath, "//input[@class='date_time_picker end_date long_time']", wait: 2).click
+    time = Time.now
+    find(:xpath, "//div[@class='xdsoft_datetimepicker xdsoft_noselect xdsoft_' and contains(@style, 'display: block')]//td[@data-date='" + (time.day + 1).to_s + "' and @data-month='" + (time.month - 1).to_s + "' and @data-year='" + time.year.to_s + "']/div", wait: 2).click
+    find(:xpath, "//div[@class='xdsoft_datetimepicker xdsoft_noselect xdsoft_' and contains(@style, 'display: block')]//div[@class='xdsoft_timepicker active']//div[contains(@class, 'xdsoft_current')]", wait: 2).click
     find(:id, "point_promotion_point_strategies_attributes_0_rule_type", wait: 2).click
     find(:xpath, "//select[@id='point_promotion_point_strategies_attributes_0_rule_type']/option[@value='equals']", wait: 2).click
     fill_in 'point_promotion_point_strategies_attributes_0_value', with: 5

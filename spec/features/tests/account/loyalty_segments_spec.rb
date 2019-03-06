@@ -29,7 +29,6 @@ feature 'Segments Module' do
     within '.flash_notice' do
       verify_content 'Segment was successfully created.'
     end
-    sleep 1
   end
 
   it 'should update a segment' do
@@ -37,7 +36,6 @@ feature 'Segments Module' do
     within '.flash_notice' do
       verify_content 'Segment was successfully updated.'
     end
-    sleep 1
   end
 
   it 'should delete a segment' do
@@ -45,17 +43,17 @@ feature 'Segments Module' do
     within '.flash_notice' do
       verify_content 'Segment was successfully deleted.'
     end
-    sleep 1
   end
 
   it 'should preview customers in a segment' do
     open_segment 'Auto_Segment_Special'
     preview_customers_in_segment
     verify_customer_belongs_to_segment @automation_customer_1
-    close_segment_preview
+    close_segment_preview_frame
+    cancel_segment
   end
 
   after(:each) do
-    logout(@username)
+    logout
   end
 end

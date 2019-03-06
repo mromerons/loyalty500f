@@ -123,6 +123,21 @@ module Navigation
     false
   end
 
+  def wait_for_xpath_selector(selector, seconds)
+    i = 1
+    seconds.times do |secs|
+      if has_xpath? selector
+        return true
+      else
+        break if i >= Capybara.default_max_wait_time
+        puts "Waiting #{selector} to appear #{i} seconds"
+        i += 1
+        pause_for 1
+      end
+    end
+    false
+  end
+
   def wait_for(kind, locator, seconds)
     for i in 0..seconds
       element = first(kind, locator)
@@ -278,51 +293,6 @@ def in_browser(name, opts={})
   end
 end
 
-def in_csa_portal(opts={})#(username, password) <- implement it if needed
-  # quick wrapper to avoid include visit, browser_max and
-  # common and repeated lines
-  aggregate_failures do
-    in_browser(:csa, opts) do
-      visit '/'                   #
-      browser_maximize            #
-      login_into_csa_application  #
-      yield   if block_given?
-    end
-  end
-end
-
-def in_provider_portal(username, password, opts={})
-  # quick wrapper to avoid include visit, browser_max and
-  # common and repeated lines
-  opts[:nuke_system_alerts] = true        unless opts.has_key? :nuke_system_alerts
-
-  aggregate_failures do
-    in_browser(:provider_portal, opts) do
-      visit '/'
-      browser_maximize
-      FrontEndMainPageObject.new
-          .sign_in(username, password, opts[:nuke_system_alerts])
-      yield   if block_given?
-    end
-  end
-end
-
-def in_patient_portal(username, password, opts={})
-  # quick wrapper to avoid include visit, browser_max and
-  # common and repeated lines
-  opts[:nuke_system_alerts] = true        unless opts.has_key? :nuke_system_alerts
-
-  aggregate_failures do
-    in_browser(:patient_portal, opts) do
-      visit '/'
-      browser_maximize
-      FrontEndMainPageObject.new
-          .sign_in(username, password, opts[:nuke_system_alerts])
-      yield   if block_given?
-    end
-  end
-end
-
 def get_host_from_driver(name)
   begin
     $driver.webhost_for(environment: $driver.environment, app: name)
@@ -371,4 +341,8 @@ end
 
 def js_set_attribute(elem, attr, value)
   page.driver.browser.execute_script("arguments[0].setAttribute('#{attr}', '#{value}')", elem.native)
+end
+
+def get_current_url_path
+  URI.parse(current_url).path
 end

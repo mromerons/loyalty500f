@@ -48,6 +48,6 @@ feature 'Rewards Module' do
   end
 
   after(:each) do
-    logout(@username)
+    logout
   end
 end
