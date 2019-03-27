@@ -14,7 +14,7 @@ module BadgesPage
 
   def modify_badge_series(name)
     find(:xpath, "//tr[@class='item']//a//dt[contains(text(), '" + name + "')]", wait: 2).click
-    # fill_in 'tier_points', with: '15'
+    fill_in 'badge_group_description', with: name + '_Description_Updated'
     click_link_or_button 'Save'
   end
 

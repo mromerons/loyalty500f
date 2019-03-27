@@ -1,38 +1,41 @@
 module MembersPage
   include Capybara::DSL
 
-  def add_new_member(member)
+  def add_new_member(customer)
     find(:xpath, "//a[@href=contains (text(), 'new') and text()='Add new member']", wait: 2).click
-    fill_in 'customer_email', with: member.to_s + '@gmail.com'
-    fill_in 'customer_customer_detail_attributes_first_name', with: 'Automation'
-    fill_in 'customer_customer_detail_attributes_last_name', with: 'Member'
+    fill_in 'customer_email', with: customer[:id]
+    fill_in 'customer_customer_detail_attributes_first_name', with: customer[:first_name]
+    fill_in 'customer_customer_detail_attributes_last_name', with: customer[:last_name]
     find(:id, 'customer_customer_detail_attributes_birthdate_2i', wait: 2).click
-    find(:xpath, "//select[@id='customer_customer_detail_attributes_birthdate_2i']/option[3]", wait: 2).click
+    find(:xpath, "//select[@id='customer_customer_detail_attributes_birthdate_2i']/option[@value='" + (customer[:date_of_birth]['month']).to_s + "']", wait: 2).click
     find(:id, 'customer_customer_detail_attributes_birthdate_3i', wait: 2).click
-    find(:xpath, "//select[@id='customer_customer_detail_attributes_birthdate_3i']/option[23]", wait: 2).click
+    find(:xpath, "//select[@id='customer_customer_detail_attributes_birthdate_3i']/option[@value='" + (customer[:date_of_birth]['day']).to_s + "']", wait: 2).click
     find(:id, 'customer_customer_detail_attributes_birthdate_1i', wait: 2).click
-    find(:xpath, "//select[@id='customer_customer_detail_attributes_birthdate_1i']/option[83]", wait: 2).click
-    fill_in 'customer_customer_detail_attributes_address_line_1', with: 'TestAddressLine1'
-    fill_in 'customer_customer_detail_attributes_address_line_2', with: 'TestAddressLine2'
+    find(:xpath, "//select[@id='customer_customer_detail_attributes_birthdate_1i']/option[@value='" + (customer[:date_of_birth]['year']).to_s + "']", wait: 2).click
+    fill_in 'customer_customer_detail_attributes_address_line_1', with: customer[:address_line_1]
+    fill_in 'customer_customer_detail_attributes_address_line_2', with: customer[:address_line_2]
     find(:id, 'customer_customer_detail_attributes_country', wait: 2).click
-    find(:xpath, "//select[@id='customer_customer_detail_attributes_country']/option[@value='US']", wait: 2).click
-    fill_in 'customer_customer_detail_attributes_city', with: 'Phoenix'
+    find(:xpath, "//select[@id='customer_customer_detail_attributes_country']/option[@value='" + customer[:country] + "']", wait: 2).click
+    fill_in 'customer_customer_detail_attributes_city', with: customer[:city]
     find(:id, 'customer_customer_detail_attributes_state', wait: 2).click
-    find(:xpath, "//select[@id='customer_customer_detail_attributes_state']/option[@value='AZ']", wait: 2).click
-    fill_in 'customer_customer_detail_attributes_postal_code', with: 85002
-    fill_in 'customer_customer_detail_attributes_home_phone', with: '+001 777 888-1111'
-    fill_in 'customer_customer_detail_attributes_work_phone', with: '+001 777 888-2222'
-    fill_in 'customer_customer_detail_attributes_mobile_phone', with: '+001 777 888-3333'
+    find(:xpath, "//select[@id='customer_customer_detail_attributes_state']/option[@value='" + customer[:state] + "']", wait: 2).click
+    fill_in 'customer_customer_detail_attributes_postal_code', with: customer[:postal_code]
+    fill_in 'customer_customer_detail_attributes_home_phone', with: customer[:home_phone]
+    fill_in 'customer_customer_detail_attributes_work_phone', with: customer[:work_phone]
+    fill_in 'customer_customer_detail_attributes_mobile_phone', with: customer[:mobile_phone]
     find(:id, 'customer_locale', wait: 2).click
-    find(:xpath, "//select[@id='customer_locale']/option[@value='en-US']", wait: 2).click
+    find(:xpath, "//select[@id='customer_locale']/option[@value='" + customer[:locale] + "']", wait: 2).click
     click_link_or_button 'Save'
   end
 
-  def find_member(member)
-    fill_in 'search_string', with: member
-    sleep 2
-    find(:xpath, "//a[@class='tertiary_button' and normalize-space()='Search']", wait: 2).click
-    find(:xpath, "//a/dl/dd[contains(text(), '" + member.downcase + "')]", wait: 5).click
+  def find_member(customer_id)
+    fill_in 'search_string', with: customer_id
+    search_retry_number = 10
+    while has_xpath?("//a/dl/dd[contains(text(), '" + customer_id.downcase + "')]", wait: 1) == false and search_retry_number > 0 do
+      find(:xpath, "//a[@class='tertiary_button' and normalize-space()='Search']", wait: 1).click
+      search_retry_number -= 1
+    end
+    find(:xpath, "//a/dl/dd[contains(text(), '" + customer_id.downcase + "')]", wait: 2).click
   end
 
   def update_date_selection
@@ -41,7 +44,7 @@ module MembersPage
 
   def edit_member_profile
     find(:xpath, "//div[@class='edit_button']/a[contains(@href, '/edit') and text()= 'Edit']", wait: 2).click
-    fill_in 'customer_customer_detail_attributes_postal_code', with: 85003
+    fill_in 'customer_customer_detail_attributes_postal_code', with: 99999
     click_link_or_button 'Save'
   end
 
@@ -57,11 +60,11 @@ module MembersPage
     click_link_or_button 'Manage events'
   end
 
-  def record_purchase_event
+  def record_purchase_event(value = 10)
     click_link_or_button 'Record Events'
     find(:id, 'event_type', wait: 2).click
     find(:xpath, "//select[@id='event_type']//option[@value='purchase']", wait: 2).click
-    fill_in 'event_value', with: 10
+    fill_in 'event_value', with: value
     click_link_or_button 'Save'
   end
 
@@ -80,10 +83,24 @@ module MembersPage
     click_link_or_button 'Save'
   end
 
-  def reject_event
+  def reject_last_purchase_event
     click_link_or_button 'Manage events'
     find(:xpath, "//table[@id='approved']//tr[@class='event_row row_type_purchase'][1]", wait: 2).click
     click_link_or_button 'Reject Points'
+  end
+
+  def reject_last_event_of(event)
+    click_link_or_button 'Manage events'
+    find(:xpath, "//table[@id='approved']//tr[@class='event_row row_type_" + event + "'][1]", wait: 2).click
+    click_link_or_button 'Reject Points'
+  end
+
+  def record_return_event
+    click_link_or_button 'Record Events'
+    find(:id, 'event_type', wait: 2).click
+    find(:xpath, "//select[@id='event_type']//option[@value='return']", wait: 2).click
+    fill_in 'event_value', with: 10
+    click_link_or_button 'Save'
   end
 
   def verify_badges_section
@@ -142,11 +159,6 @@ module MembersPage
 
   def verify_upcoming_rewards_section
     verify_content_by_xpath "//div[@class='rewards_wrap upcoming_rewards']"
-  end
-
-  def purchase_via_api(member_id)
-    url = "https://loyalty-stage.500friends.com/api/record.json?uuid=d01714e04c5f13&email=automember" + member_id + "%40gmail.com&type=purchase&value=20&event_id=" + member_id + "&brand=Nearsoft&channel=qa&sub_channel=automation"
-    RestClient.get(url)
   end
 
   def verify_event_exist(event_name)

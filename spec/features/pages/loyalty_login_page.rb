@@ -8,8 +8,8 @@ module LoginPage
     click_link_or_button 'sign_in'
   end
 
-  def verify_user_name
-    find(:xpath, "//a[@class='options_link' and text()='Nearsoft']", wait: 2)
+  def verify_user_name(first_name)
+    find(:xpath, "//a[@class='options_link' and text()='" + first_name + "']", wait: 2)
   end
 
   def verify_account_name

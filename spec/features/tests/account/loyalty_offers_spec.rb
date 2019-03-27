@@ -1,11 +1,19 @@
-require './lib/requires'
+require './spec/spec_helper'
 
-feature 'Offers Module' do
+describe 'Offers Module' do
+  # Utils
   include VerificationHelpers
+
+  # Pages
   include LoginPage
   include AdminPage
   include LandingPage
   include OffersPage
+
+
+  let(:user) { GetData.get_user('automation_user') }
+  let(:account) { GetData.get_account('automation_account') }
+
 
   before(:all) do
     @deal_name = 'Auto_deal_' + Time.now.to_i.to_s
@@ -13,12 +21,9 @@ feature 'Offers Module' do
   end
 
   before(:each) do
-    @account = 1008
-    @username = 'merklensqa@gmail.com'
-    @password = 'Test1234'
     visit '/'
-    login(@username, @password)
-    find_account(@account)
+    login(user[:username], user[:password])
+    find_account(account[:number])
     navigate_account
     navigate_account_offers
   end
@@ -28,7 +33,6 @@ feature 'Offers Module' do
     within '.flash_notice' do
       verify_content 'Deal created successfully.'
     end
-    sleep 1
   end
 
   it 'should update a deal' do
@@ -36,7 +40,6 @@ feature 'Offers Module' do
     within '.flash_notice' do
       verify_content 'Deal updated successfully.'
     end
-    sleep 1
   end
 
   it 'should delete a deal' do
@@ -44,7 +47,6 @@ feature 'Offers Module' do
     within '.flash_notice' do
       verify_content 'The deal has been deleted.'
     end
-    sleep 1
   end
 
   it 'should add a new promotion' do
@@ -52,7 +54,6 @@ feature 'Offers Module' do
     within '.flash_notice' do
       verify_content 'Points promotion was successfully created.'
     end
-    sleep 1
   end
 
   it 'should update a promotion' do
@@ -60,7 +61,6 @@ feature 'Offers Module' do
     within '.flash_notice' do
       verify_content 'Points promotion was successfully updated.'
     end
-    sleep 1
   end
 
   it 'should archive a promotion' do
@@ -68,7 +68,6 @@ feature 'Offers Module' do
     within '.flash_notice' do
       verify_content 'The point promotion has been archived.'
     end
-    sleep 1
   end
 
   after(:each) do

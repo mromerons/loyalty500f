@@ -1,6 +1,4 @@
 require 'selenium-webdriver'
-# require 'chromedriver/helper'
-# require 'yaml'
 
 module Common
   class DriverSettings
@@ -8,12 +6,11 @@ module Common
     attr_reader :environment, :browser
 
     def initialize(params={})
-      @environment =    params[:environment]                || 'loyalty-stage'
+      @environment =    params[:environment]                || 'loyalty-stage' # eu-staging-loyalty
       @browser =        params[:browser]                    || 'chrome'
 
       # Capybara default settings
       Capybara.default_driver = :selenium
-      # Capybara.app_host = webhost_for(environment: @environment, app: @app)
       Capybara.app_host = "https://" + @environment + ".500friends.com"
       Capybara.run_server = false
       Capybara.default_max_wait_time = 10
@@ -49,7 +46,7 @@ module Common
 
     def chrome_settings
       options = Selenium::WebDriver::Chrome::Options.new
-      options.add_argument("--window-size=1800,1050")
+      # options.add_argument("--window-size=1800,1050")
       options.add_argument("--disable-infobars")
       { browser: :chrome, options: options }
     end

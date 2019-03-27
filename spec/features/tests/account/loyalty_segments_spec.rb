@@ -1,25 +1,30 @@
-require './lib/requires'
+require './spec/spec_helper'
 
-feature 'Segments Module' do
+describe 'Segments Module' do
+
+  # Utils
   include VerificationHelpers
+
+  # Pages
   include Navigation
   include LoginPage
   include AdminPage
   include LandingPage
   include SegmentsPage
 
+
+  let(:user) { GetData.get_user('automation_user') }
+  let(:account) { GetData.get_account('automation_account') }
+
+
   before(:all) do
     @segment_name = 'Auto_segment_' + Time.now.to_i.to_s
-    @automation_customer_1 = 'Nearsoft Test1'
   end
 
   before(:each) do
-    @account = 1008
-    @username = 'merklensqa@gmail.com'
-    @password = 'Test1234'
     visit '/'
-    login(@username, @password)
-    find_account(@account)
+    login(user[:username], user[:password])
+    find_account(account[:number])
     navigate_account
     navigate_account_segments
   end
@@ -38,19 +43,18 @@ feature 'Segments Module' do
     end
   end
 
+  it 'should open preview of segment' do
+    open_segment @segment_name
+    preview_customers_in_segment
+    close_segment_preview_frame
+    cancel_segment
+  end
+
   it 'should delete a segment' do
     delete_segment @segment_name
     within '.flash_notice' do
       verify_content 'Segment was successfully deleted.'
     end
-  end
-
-  it 'should preview customers in a segment' do
-    open_segment 'Auto_Segment_Special'
-    preview_customers_in_segment
-    verify_customer_belongs_to_segment @automation_customer_1
-    close_segment_preview_frame
-    cancel_segment
   end
 
   after(:each) do

@@ -1,12 +1,21 @@
-require './lib/requires'
+require './spec/spec_helper'
 
-feature 'Badges Module' do
+describe 'Badges Module' do
+
+  # Utils
   include VerificationHelpers
   include CustomUtils
+
+  # Pages
   include LoginPage
   include AdminPage
   include LandingPage
   include BadgesPage
+
+
+  let(:user) { GetData.get_user('automation_user') }
+  let(:account) { GetData.get_account('automation_account') }
+
 
   before(:all) do
     @badge_series_name = 'Auto_badge_series_' + Time.now.to_i.to_s
@@ -14,12 +23,9 @@ feature 'Badges Module' do
   end
 
   before(:each) do
-    @account = 1008
-    @username = 'merklensqa@gmail.com'
-    @password = 'Test1234'
     visit '/'
-    login(@username, @password)
-    find_account(@account)
+    login(user[:username], user[:password])
+    find_account(account[:number])
     navigate_account
     navigate_account_badges
   end
@@ -29,7 +35,6 @@ feature 'Badges Module' do
     within '.flash_notice' do
       verify_content 'Badge series was successfully added.'
     end
-    sleep 1
   end
 
   it 'should add a new badge' do
@@ -38,7 +43,6 @@ feature 'Badges Module' do
     within '.flash_notice' do
       verify_content 'Badge was successfully added.'
     end
-    sleep 1
   end
 
   it 'should modify a badge' do
@@ -47,7 +51,6 @@ feature 'Badges Module' do
     within '.flash_notice' do
       verify_content 'Badge was successfully updated.'
     end
-    sleep 1
   end
 
   it 'should delete a badge' do
@@ -56,7 +59,6 @@ feature 'Badges Module' do
     within '.flash_notice' do
       verify_content 'The badge has been deleted.'
     end
-    sleep 1
   end
 
   it 'should modify a badge series' do
@@ -65,7 +67,6 @@ feature 'Badges Module' do
     within '.flash_notice' do
       verify_content 'Badge series was successfully updated.'
     end
-    sleep 1
   end
 
   it 'should delete a badge series' do
@@ -74,7 +75,6 @@ feature 'Badges Module' do
     within '.flash_notice' do
       verify_content 'The badge series has been deleted.'
     end
-    sleep 1
   end
 
   after(:each) do

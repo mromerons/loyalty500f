@@ -1,5 +1,3 @@
-require './lib/helpers/navigation'
-
 module LandingPage
   include Capybara::DSL
 

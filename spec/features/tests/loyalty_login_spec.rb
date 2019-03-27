@@ -1,30 +1,33 @@
-require './lib/requires'
-require './lib/helpers/navigation'
+require './spec/spec_helper'
 
-feature 'Login Module' do
-  include VerificationHelpers
+describe 'Login Module' do
+
+  # Utils
+  include Navigation
+
+  # Pages
   include LoginPage
   include AdminPage
   include LandingPage
-  include Navigation
+
+
+  let(:user) { GetData.get_user('automation_user') }
+  let(:account) { GetData.get_account('automation_account') }
+
 
   before(:each) do
     visit '/'
-    @account = 1008
-    @username = 'merklensqa@gmail.com'
-    @password = 'Test1234'
+    login(user[:username], user[:password])
   end
 
   it 'should sign in loyaltyplus' do
-    login(@username, @password)
-    verify_user_name
+    verify_user_name(user[:first_name])
   end
 
   it 'should go to test automation account' do
-    login(@username, @password)
-    find_account(@account)
+    find_account(account[:name])
     account_name = verify_account_name.text
-    account_name == 'Nearsoft Automation'
+    account_name == account[:name]
   end
 
   after(:each) do
